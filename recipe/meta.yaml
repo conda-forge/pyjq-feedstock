@@ -25,6 +25,7 @@ requirements:
     - python
     - cython
     - pip
+    - setuptools
     - jq 1.5.*
   run:
     - jq 1.5.*
