@@ -10,6 +10,7 @@ source:
   sha256: e083f326f4af8b07b8ca6424d1f99afbdd7db9b727284da5f919b9816077f2e4
   patches:
     - 0001-Use-pre-built-external-deps.patch
+    - 0002-Cythonize-for-Python-3.12-compat.patch
 
 build:
   script: {{ PYTHON }} -m pip install . -vv
@@ -22,6 +23,7 @@ requirements:
     - {{ stdlib("c") }}
   host:
     - python
+    - cython
     - pip
     - jq 1.5.*
   run:
