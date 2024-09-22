@@ -1,0 +1,56 @@
+From 0bb650164829fc74aaa14ad54427ce1bc0c12a54 Mon Sep 17 00:00:00 2001
+From: Nehal J Wani <nehaljw.kkd1@gmail.com>
+Date: Sun, 22 Sep 2024 17:50:23 +0100
+Subject: [PATCH 2/2] Cythonize for Python 3.12+ compat
+
+---
+ _pyjq.pyx | 2 +-
+ setup.py  | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/_pyjq.pyx b/_pyjq.pyx
+index 89cb451..48765cb 100644
+--- a/_pyjq.pyx
++++ b/_pyjq.pyx
+@@ -157,7 +157,7 @@ cdef jv pyobj_to_jv(object pyobj) except *:
+         raise TypeError("{!r} could not be converted to json".format(type(pyobj)))
+ 
+ 
+-cdef void Script_error_cb(void* x, jv err):
++cdef void Script_error_cb(void* x, jv err) noexcept:
+     Script._error_cb(<object>x, err)
+ 
+ 
+diff --git a/setup.py b/setup.py
+index f9caf1f..44efdc4 100644
+--- a/setup.py
++++ b/setup.py
+@@ -11,6 +11,7 @@ import tarfile
+ from os.path import abspath, dirname, join
+ from pathlib import Path
+ 
++from Cython.Build import cythonize
+ from setuptools import setup
+ from setuptools.command.build_ext import _build_ext
+ from setuptools.extension import Extension
+@@ -102,14 +103,13 @@ if platform.architecture()[1] == "WindowsPE":
+ 
+ pyjq = Extension(
+     "_pyjq",
+-    sources=["_pyjq.c"],
++    sources=["_pyjq.pyx"],
+     include_dirs=[os.path.join(sys.prefix, "include")],
+     libraries=libraries,
+     library_dirs=[os.path.join(sys.prefix, "lib")],
+ )
+ 
+ setup(
+-    ext_modules=[pyjq],
+-    cmdclass={"build_ext": build_ext},
+-    package_data={"": [onig_tarball_path, jq_tarball_path]},
++    ext_modules=cythonize([pyjq]),
++    py_modules=["pyjq"],
+ )
+-- 
+2.45.2
+
