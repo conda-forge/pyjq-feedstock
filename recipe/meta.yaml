@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/pyjq-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pyjq-{{ version }}.tar.gz
   sha256: e083f326f4af8b07b8ca6424d1f99afbdd7db9b727284da5f919b9816077f2e4
   patches:
     - 0001-Use-pre-built-external-deps.patch
@@ -14,7 +14,7 @@ source:
 
 build:
   script: {{ PYTHON }} -m pip install . -vv
-  number: 3
+  number: 4
   skip: true  # [not unix]
 
 requirements:
